@@ -6,21 +6,26 @@ import time
 import math
 
 stock_basic_info = None
+stock_hist_info = pd.DataFrame()
 purchase_code_list = []
 pe_low = 0
-pe_up = 50
+pe_up = 200
+gpr = 30
+npr = 15
+rev = 5
+profit = 5
 
 pb_low = 1
-pb_up = 5
+pb_up = 6
 outstanding = 10
-totals = 150
+totals = 300
 minturnover = 2
 maxturnover = 10
 
 now = None
 request_date = None
 last_request_date = None
-p_diff_rate = 1.5
+p_diff_rate = 2
 v_diff_rate = 5
 fixedslop = 0.5
 
@@ -44,10 +49,10 @@ def drop_unused_columns():
 	del stock_basic_info["timeToMarket"]
 	del stock_basic_info["undp"]
 	del stock_basic_info["perundp"]
-	del stock_basic_info["rev"]
-	del stock_basic_info["profit"]
-	del stock_basic_info["gpr"]
-	del stock_basic_info["npr"]
+	#del stock_basic_info["rev"]
+	#del stock_basic_info["profit"]
+	#del stock_basic_info["gpr"]
+	#del stock_basic_info["npr"]
 	del stock_basic_info["holders"]
 
 # get all A stocks
@@ -55,7 +60,7 @@ def get_all_a_stocks():
 	global stock_basic_info
 	code_list = []
 	for code in stock_basic_info.index:
-		if code.startswith("600") or code.startswith("601") or code.startswith("00"):
+		if code.startswith("601") or code.startswith("601") or code.startswith("603") or code.startswith("00"):
 			code_list.append(code)
 
 	stock_basic_info = stock_basic_info[stock_basic_info.index.isin(code_list)]
@@ -64,28 +69,31 @@ def get_all_a_stocks():
 def basic_filters():
 	global stock_basic_info
 	#filter by PE
-	stock_basic_info = stock_basic_info[stock_basic_info["pe"] > pe_low]
-	stock_basic_info = stock_basic_info[stock_basic_info["pe"] < pe_up]
+	stock_basic_info = stock_basic_info[stock_basic_info["pe"] >= pe_low]
+	stock_basic_info = stock_basic_info[stock_basic_info["pe"] <= pe_up]
 	#filter by PB
-	stock_basic_info = stock_basic_info[stock_basic_info["pb"] > pb_low]
-	stock_basic_info = stock_basic_info[stock_basic_info["pb"] < pb_up]
+	stock_basic_info = stock_basic_info[stock_basic_info["pb"] >= pb_low]
+	stock_basic_info = stock_basic_info[stock_basic_info["pb"] <= pb_up]
+	stock_basic_info = stock_basic_info[stock_basic_info["rev"] >= rev]
+	stock_basic_info = stock_basic_info[stock_basic_info["profit"] >= profit]
+	stock_basic_info = stock_basic_info[stock_basic_info["gpr"] >= gpr]
+	stock_basic_info = stock_basic_info[stock_basic_info["npr"] >= npr]
 	#filter by outstanding and totals
 	#stock_basic_info = stock_basic_info[stock_basic_info["outstanding"] > outstanding]
 	#stock_basic_info = stock_basic_info[stock_basic_info["totals"] < totals]
 	for code in stock_basic_info.index:
 		purchase_code_list.append(code)
-	del stock_basic_info
 
 
 
 def filter_by_avg_price_volume():
-	global now, request_date
+	global now, request_date, stock_hist_info
 	ma5 = ma10 = ma20 = vma5 =  vma10 = vma20 = 0.0
 	market_value = 0.0
 	turnover = 0.0
 	tm_wday = time.localtime(time.time()).tm_wday
 	tm_hour = time.localtime(time.time()).tm_hour
-	if tm_hour < 18:
+	if tm_hour < 15:
 		today = datetime.date.today()
 		oneday = datetime.timedelta(days=1)
 		now = today - oneday
@@ -126,13 +134,14 @@ def filter_by_avg_price_volume():
 			#if ma5 >= ma10 and ma10 >= ma20 and vma5 >= vma10 and vma10 >= vma20:
 			#print ma5,ma10,ma20,math.fabs(ma5-ma10)/ma10*100,math.fabs(ma10-ma20)/ma20*100
 			#break
-			if (math.fabs(ma5-ma10)/ma5*100 < p_diff_rate) or (math.fabs(ma10-ma20)/ma10*100 < p_diff_rate):	
+			"""
+			if (math.fabs(ma5-ma10)/ma5*100 < p_diff_rate):	
 				pass
 			else:
 				del purchase_code_list[i]
 				continue
-
-			if ma10 > close or ma20 > close:
+			"""
+			if ma5 >= ma10:
 				pass
 			else:
 				del purchase_code_list[i]
@@ -152,38 +161,48 @@ def filter_by_avg_price_volume():
 				del purchase_code_list[i]
 				continue
 			"""
-			
+		#stock_hist_info.append(stock)
+		#print i
 		i += 1
 
 
 def filter_by_slope():
 	global now, last_request_date, request_date
-	two_day_before = datetime.timedelta(days=2)
-	two_day_before_date = now - two_day_before
-	weekday = two_day_before_date.weekday()
+	yesterday = datetime.timedelta(days=2)
+	yesterday_date = now - yesterday
+	weekday = yesterday_date.weekday()
 	if weekday == 5:
 		delta = datetime.timedelta(days=-1)
-		last_date = two_day_before_date + delta
+		last_date = yesterday_date + delta
 		last_request_date = last_date.strftime("%Y-%m-%d")
 	elif weekday == 6:
 		delta = datetime.timedelta(days=-2)
-		last_date = two_day_before_date + delta
+		last_date = yesterday_date + delta
 		last_request_date = last_date.strftime("%Y-%m-%d")		
 	else:
-		last_request_date = two_day_before_date.strftime("%Y-%m-%d")
+		last_request_date = yesterday_date.strftime("%Y-%m-%d")
 	i = 0
 	while i < len(purchase_code_list):
 		last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date)
 		last_ma5 = last_stock["ma5"][0]
 		last_ma10 = last_stock["ma10"][0]
+		#curr_stock = stock_hist_info.reindex(purchase_code_list[i])
 		curr_stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
 		curr_ma5 = curr_stock["ma5"][0]
 		curr_ma10 = curr_stock["ma10"][0]
-		if ((curr_ma5 - last_ma5)/last_ma5*100) > fixedslop or ((curr_ma10 - last_ma10)/last_ma5*100) > fixedslop:
+		#  
+		if ((curr_ma5 - last_ma5)/last_ma5*100) > fixedslop:
 			pass
 		else:
 			del purchase_code_list[i]
 			continue
+		#
+		if last_ma5 < last_ma10:
+			pass
+		else:
+			del purchase_code_list[i]
+			continue
+
 		i += 1
 
 
@@ -195,6 +214,7 @@ drop_unused_columns()
 #print stock_basic_info
 get_all_a_stocks()
 basic_filters()
+#print len(purchase_code_list)
 filter_by_avg_price_volume()
 filter_by_slope()
 print purchase_code_list
