@@ -31,7 +31,7 @@ last_request_date = None
 p_diff_rate = 2
 v_diff_rate = 5
 fixedslop = 0.5
-avg_diff = 0.5
+avg_diff = 2.0
 
 cf_sales = 0.2
 cf_nm = 0.8
@@ -55,6 +55,7 @@ def get_stock_basic_info():
 	stock_basic_info = ts.get_stock_basics()
 	stock_cashflow_info = ts.get_cashflow_data(int(this_year),season)
 	stock_cashflow_info = stock_cashflow_info.fillna(0)
+	print this_year,season
 	#print type(stock_basic_info)
 	#print type(stock_cashflow_info)
 
@@ -88,7 +89,7 @@ def get_all_a_stocks():
 	global stock_basic_info, stock_cashflow_info
 	code_list = []
 	for code in stock_basic_info.index:
-		if code.startswith("601") or code.startswith("601") or code.startswith("603") or code.startswith("00"):
+		if code.startswith("600") or code.startswith("601") or code.startswith("603") or code.startswith("00"):
 			code_list.append(code)
 
 	stock_basic_info = stock_basic_info[stock_basic_info.index.isin(code_list)]
@@ -163,7 +164,7 @@ def filter_by_avg_price_volume():
 		request_date = now.strftime("%Y-%m-%d")
 	
 	i = 0
-	#request_date = "2016-12-30"	
+	#request_date = "2017-01-04"	
 	while i < len(purchase_code_list):
 		stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
 		try:
@@ -226,6 +227,7 @@ def filter_by_avg_price_volume():
 		i += 1
 
 
+
 def filter_by_slope():
 	global now, last_request_date, request_date
 	yesterday = datetime.timedelta(days=2)
@@ -242,7 +244,7 @@ def filter_by_slope():
 	else:
 		last_request_date = yesterday_date.strftime("%Y-%m-%d")
 
-	#last_request_date = "2016-12-28"
+	#last_request_date = "2016-12-30"
 	i = 0
 	while i < len(purchase_code_list):
 		last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date)
@@ -253,6 +255,7 @@ def filter_by_slope():
 		curr_ma5 = curr_stock["ma5"][0]
 		curr_ma10 = curr_stock["ma10"][0]
 		#  
+		print curr_ma5, last_ma5, ((curr_ma5 - last_ma5)/last_ma5*100)
 		if ((curr_ma5 - last_ma5)/last_ma5*100) > fixedslop:
 			pass
 		else:
@@ -272,6 +275,7 @@ def filter_by_slope():
 
 
 get_stock_basic_info()
+
 drop_unused_columns()
 get_all_a_stocks()
 basic_filters()
@@ -279,6 +283,7 @@ filter_by_avg_price_volume()
 filter_by_slope()
 print request_date,last_request_date
 print purchase_code_list
+
 
 
 
