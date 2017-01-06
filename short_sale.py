@@ -4,7 +4,7 @@ import pandas as pd
 import datetime
 import time
 
-stocks = ["000926","601899","000977","000413"]
+stocks = ["000301","000413","000936","002372","600503"]
 
 saling_stocks = []
 fixed_down_rate = -0.2
@@ -34,6 +34,7 @@ def detect_saling_stocks():
 	else:
 		request_date = now.strftime("%Y-%m-%d")
 
+	#request_date = "2017-01-04"	
 	yesterday = datetime.timedelta(days=2)
 	yesterday_date = now - yesterday
 	weekday = yesterday_date.weekday()
@@ -47,6 +48,8 @@ def detect_saling_stocks():
 		last_request_date = last_date.strftime("%Y-%m-%d")		
 	else:
 		last_request_date = yesterday_date.strftime("%Y-%m-%d")
+
+	#last_request_date = "2016-12-30"
 	for stock_code in stocks:
 		curr_stock = ts.get_hist_data(stock_code, start=request_date,end=request_date)
 		last_stock = ts.get_hist_data(stock_code, start=last_request_date,end=last_request_date)

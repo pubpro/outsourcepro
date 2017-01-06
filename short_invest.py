@@ -55,7 +55,7 @@ def get_stock_basic_info():
 	stock_basic_info = ts.get_stock_basics()
 	stock_cashflow_info = ts.get_cashflow_data(int(this_year),season)
 	stock_cashflow_info = stock_cashflow_info.fillna(0)
-	print this_year,season
+	#print this_year,season
 	#print type(stock_basic_info)
 	#print type(stock_cashflow_info)
 
@@ -164,10 +164,11 @@ def filter_by_avg_price_volume():
 		request_date = now.strftime("%Y-%m-%d")
 	
 	i = 0
-	#request_date = "2017-01-04"	
+	#request_date = "2017-01-04"
+	#print request_date	
 	while i < len(purchase_code_list):
-		stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
 		try:
+			stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
 			ma5 = stock["ma5"][0]
 			ma10 = stock["ma10"][0]
 			ma20 = stock["ma20"][0]
@@ -177,7 +178,8 @@ def filter_by_avg_price_volume():
 			turnover = stock["turnover"][0]
 			close = stock["close"][0]
 			volume = stock["volume"][0]
-		except Exception as e:
+		except:
+			#print purchase_code_list[i], request_date
 			del purchase_code_list[i]
 			continue
 		else:
@@ -245,17 +247,23 @@ def filter_by_slope():
 		last_request_date = yesterday_date.strftime("%Y-%m-%d")
 
 	#last_request_date = "2016-12-30"
+	#print last_request_date
 	i = 0
 	while i < len(purchase_code_list):
-		last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date)
-		last_ma5 = last_stock["ma5"][0]
-		last_ma10 = last_stock["ma10"][0]
-		#curr_stock = stock_hist_info.reindex(purchase_code_list[i])
-		curr_stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
-		curr_ma5 = curr_stock["ma5"][0]
-		curr_ma10 = curr_stock["ma10"][0]
+		try:
+			last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date)
+			last_ma5 = last_stock["ma5"][0]
+			last_ma10 = last_stock["ma10"][0]
+			#curr_stock = stock_hist_info.reindex(purchase_code_list[i])
+			curr_stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date)
+			curr_ma5 = curr_stock["ma5"][0]
+			curr_ma10 = curr_stock["ma10"][0]
+		except:
+			#print purchase_code_list[i], last_request_date
+			del purchase_code_list[i]
+			continue
 		#  
-		print curr_ma5, last_ma5, ((curr_ma5 - last_ma5)/last_ma5*100)
+		#print curr_ma5, last_ma5, (curr_ma5 - last_ma5)/last_ma5*100
 		if ((curr_ma5 - last_ma5)/last_ma5*100) > fixedslop:
 			pass
 		else:
@@ -275,13 +283,13 @@ def filter_by_slope():
 
 
 get_stock_basic_info()
-
 drop_unused_columns()
 get_all_a_stocks()
 basic_filters()
+#purchase_code_list = ["600503"]
 filter_by_avg_price_volume()
 filter_by_slope()
-print request_date,last_request_date
+#print request_date,last_request_date
 print purchase_code_list
 
 
