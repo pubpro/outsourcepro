@@ -8,26 +8,26 @@ import math
 stock_basic_info = None
 stock_hist_info = pd.DataFrame()
 purchase_code_list = []
-pe_low = 1
-pe_up = 20
-gpr = 0
-npr = 20
-rev = 0
-profit = 0
+pe_low = 1 #price earning ratio
+pe_up = 20 #
+gpr = 0 #gross profit ratio
+npr = 15 #net profit ratio
+rev = 0 #revenue increase ratio
+profit = 0 #profit increase ratio
 
-pb_low = 1
-pb_up = 3
-outstanding = 10
-totals = 50
-minturnover = 0.0
-maxturnover = 5
+pb_low = 1 #price book value
+pb_up = 3 #
+outstanding = 10 #
+totals = 200 #total stock value
+minturnover = 0.0 #turnover
+maxturnover = 10 #
 
 now = None
 request_date = None
 last_request_date = None
-p_diff_rate = 0
-v_diff_rate = 0
-fixedslop = 0.0
+p_diff_rate = 0 #price change slope
+v_diff_rate = 0 #volumn change slope
+fixedslop = 0.0 #fix slope
 
 # get all stocks code and basic info
 def get_stock_basic_info():
@@ -60,7 +60,7 @@ def get_all_a_stocks():
 	global stock_basic_info
 	code_list = []
 	for code in stock_basic_info.index:
-		if code.startswith("601") or code.startswith("601") or code.startswith("603") or code.startswith("00"):
+		if code.startswith("600") or code.startswith("601") or code.startswith("603") or code.startswith("00"):
 			code_list.append(code)
 
 	stock_basic_info = stock_basic_info[stock_basic_info.index.isin(code_list)]
@@ -113,7 +113,7 @@ def filter_by_avg_price_volume():
 	i = 0
 	#request_date = "2016-12-27"	
 	while i < len(purchase_code_list):
-		stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date,ktype='M')
+		stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date,ktype='D')
 		try:
 			ma5 = stock["ma5"][0]
 			ma10 = stock["ma10"][0]
@@ -128,10 +128,12 @@ def filter_by_avg_price_volume():
 			del purchase_code_list[i]
 			continue
 		else:
-			print purchase_code_list[i],turnover
+			#print purchase_code_list[i],turnover
+			
 			if turnover < minturnover or turnover > maxturnover :
 				del purchase_code_list[i]
 				continue
+			
 			#if ma5 >= ma10 and ma10 >= ma20 and vma5 >= vma10 and vma10 >= vma20:
 			#print ma5,ma10,ma20,math.fabs(ma5-ma10)/ma10*100,math.fabs(ma10-ma20)/ma20*100
 			#break
@@ -142,12 +144,13 @@ def filter_by_avg_price_volume():
 				del purchase_code_list[i]
 				continue
 			"""
-
-			if ma5 >= ma10:
+			
+			if ma5 >= ma20:
 				pass
 			else:
 				del purchase_code_list[i]
 				continue
+			
 
 			"""
 			if (math.fabs(vma5-vma10)/vma10 < v_diff_rate) or (math.fabs(vma10-vma20)/vma20 < v_diff_rate):	
@@ -157,12 +160,13 @@ def filter_by_avg_price_volume():
 				continue
 			
 			"""
+			
 			#filter by market value
 			market_value = stock_basic_info.reindex([purchase_code_list[i]])["totals"][0] * close
 			if market_value > totals:
 				del purchase_code_list[i]
 				continue
-			
+				
 		#stock_hist_info.append(stock)
 		#print i
 		i += 1
@@ -170,7 +174,7 @@ def filter_by_avg_price_volume():
 
 def filter_by_slope():
 	global now, last_request_date, request_date
-	yesterday = datetime.timedelta(days=60)
+	yesterday = datetime.timedelta(days=14)
 	yesterday_date = now - yesterday
 	weekday = yesterday_date.weekday()
 	if weekday == 5:
@@ -185,12 +189,14 @@ def filter_by_slope():
 		last_request_date = yesterday_date.strftime("%Y-%m-%d")
 	i = 0
 	while i < len(purchase_code_list):
-		last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date, ktype='M')
+		last_stock = ts.get_hist_data(purchase_code_list[i],start = last_request_date, end = last_request_date, ktype='D')
 		last_ma5 = last_stock["ma5"][0]
 		last_ma10 = last_stock["ma10"][0]
-		curr_stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date, ktype='M')
+		last_ma20 = last_stock["ma20"][0]
+		curr_stock = ts.get_hist_data(purchase_code_list[i],start = request_date, end = request_date, ktype='D')
 		curr_ma5 = curr_stock["ma5"][0]
 		curr_ma10 = curr_stock["ma10"][0]
+		curr_ma20 = curr_stock["ma20"][0]
 		#  
 		if ((curr_ma5 - last_ma5)/last_ma5*100) > fixedslop:
 			pass
@@ -198,7 +204,7 @@ def filter_by_slope():
 			del purchase_code_list[i]
 			continue
 		#
-		if last_ma5 < last_ma10:
+		if last_ma5 < last_ma20:
 			pass
 		else:
 			del purchase_code_list[i]
@@ -207,7 +213,13 @@ def filter_by_slope():
 		i += 1
 
 
-
+def print_details():
+	global stock_basic_info
+	i = 0
+	while i < len(purchase_code_list):
+		stock = stock_basic_info.reindex([purchase_code_list[i]])
+		print stock
+		i += 1
 
 
 get_stock_basic_info()
@@ -215,12 +227,9 @@ drop_unused_columns()
 #print stock_basic_info
 get_all_a_stocks()
 basic_filters()
-#print len(purchase_code_list)
 filter_by_avg_price_volume()
-#print purchase_code_list
 filter_by_slope()
-print last_request_date, request_date
-print purchase_code_list
+print_details()
 
 
 
