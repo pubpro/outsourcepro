@@ -19,11 +19,9 @@ pb_low = 1 #price book value
 pb_up = 3 #
 outstanding = 10 #
 totals = 200 #total stock value
-minturnover = 0.0 #turnover
-maxturnover = 10 #
 
 now = None
-request_date = None
+request_date = ''
 last_request_date = None
 p_diff_rate = 0 #price change slope
 v_diff_rate = 0 #volumn change slope
@@ -90,7 +88,6 @@ def filter_by_avg_price_volume():
 	global now, request_date, stock_hist_info
 	ma5 = ma10 = ma20 = vma5 =  vma10 = vma20 = 0.0
 	market_value = 0.0
-	turnover = 0.0
 	tm_wday = time.localtime(time.time()).tm_wday
 	tm_hour = time.localtime(time.time()).tm_hour
 	if tm_hour < 16:
@@ -121,19 +118,12 @@ def filter_by_avg_price_volume():
 			vma5 = stock["v_ma5"][0]
 			vma10 = stock["v_ma10"][0]
 			vma20 = stock["v_ma20"][0]
-			turnover = stock["turnover"][0]
 			close = stock["close"][0]
 			volume = stock["volume"][0]
 		except Exception as e:
 			del purchase_code_list[i]
 			continue
 		else:
-			#print purchase_code_list[i],turnover
-			
-			if turnover < minturnover or turnover > maxturnover :
-				del purchase_code_list[i]
-				continue
-			
 			#if ma5 >= ma10 and ma10 >= ma20 and vma5 >= vma10 and vma10 >= vma20:
 			#print ma5,ma10,ma20,math.fabs(ma5-ma10)/ma10*100,math.fabs(ma10-ma20)/ma20*100
 			#break
