@@ -9,9 +9,10 @@ import tushare as ts
 stock_code = "000413"
 
 stocks = ts.get_stock_basics()
-hist = ts.get_hist_data(stock_code,start="2016-12-29")
+hist = ts.get_hist_data(stock_code,start="2017-08-02")
 
 stock = stocks.reindex([stock_code])
+print stock
 
 del stock["name"]
 del stock["industry"]
@@ -35,6 +36,6 @@ del stock["holders"]
 cash_flows = ts.get_cashflow_data(2016,3)
 del cash_flows["name"]
 cf = cash_flows[cash_flows["code"] == stock_code]
-print stock
+#print stock
 print cf
 #cash_flows.to_csv("/root/share/cash_flows.csv")

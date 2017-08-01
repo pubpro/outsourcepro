@@ -9,14 +9,14 @@ stock_basic_info = None
 stock_hist_info = pd.DataFrame()
 purchase_code_list = []
 pe_low = 1 #price earning ratio
-pe_up = 20 #
-gpr = 0 #gross profit ratio
-npr = 15 #net profit ratio
+pe_up = 60 #
+gpr = 20 #gross profit ratio
+npr = 10 #net profit ratio
 rev = 0 #revenue increase ratio
 profit = 0 #profit increase ratio
 
 pb_low = 1 #price book value
-pb_up = 3 #
+pb_up = 5 #
 outstanding = 10 #
 totals = 200 #total stock value
 
@@ -194,11 +194,13 @@ def filter_by_slope():
 			del purchase_code_list[i]
 			continue
 		#
+		"""
 		if last_ma5 < last_ma20:
 			pass
 		else:
 			del purchase_code_list[i]
 			continue
+		"""
 
 		i += 1
 
