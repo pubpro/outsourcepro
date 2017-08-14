@@ -10,10 +10,11 @@ stock_hist_info = pd.DataFrame()
 purchase_code_list = []
 pe_low = 1 #price earning ratio
 pe_up = 60 #
+esp = 0.1
 gpr = 20 #gross profit ratio
-npr = 10 #net profit ratio
-rev = 0 #revenue increase ratio
-profit = 0 #profit increase ratio
+npr = 20 #net profit ratio
+rev = 50 #revenue increase ratio
+profit = 50 #profit increase ratio
 
 pb_low = 1 #price book value
 pb_up = 5 #
@@ -42,7 +43,7 @@ def drop_unused_columns():
 	del stock_basic_info["fixedAssets"]
 	del stock_basic_info["reserved"]
 	del stock_basic_info["reservedPerShare"]
-	del stock_basic_info["esp"]
+	#del stock_basic_info["esp"]
 	del stock_basic_info["bvps"]
 	del stock_basic_info["timeToMarket"]
 	del stock_basic_info["undp"]
@@ -70,6 +71,7 @@ def basic_filters():
 	stock_basic_info = stock_basic_info[stock_basic_info["pe"] >= pe_low]
 	stock_basic_info = stock_basic_info[stock_basic_info["pe"] <= pe_up]
 	#filter by PB
+	stock_basic_info = stock_basic_info[stock_basic_info["esp"] >= esp]
 	stock_basic_info = stock_basic_info[stock_basic_info["pb"] >= pb_low]
 	stock_basic_info = stock_basic_info[stock_basic_info["pb"] <= pb_up]
 	stock_basic_info = stock_basic_info[stock_basic_info["rev"] >= rev]
@@ -80,7 +82,8 @@ def basic_filters():
 	#stock_basic_info = stock_basic_info[stock_basic_info["outstanding"] > outstanding]
 	#stock_basic_info = stock_basic_info[stock_basic_info["totals"] < totals]
 	for code in stock_basic_info.index:
-		purchase_code_list.append(code)
+		if stock_basic_info.reindex([code])["profit"][0] >= stock_basic_info.reindex([code])["rev"][0]:
+			purchase_code_list.append(code)
 
 
 
@@ -164,7 +167,7 @@ def filter_by_avg_price_volume():
 
 def filter_by_slope():
 	global now, last_request_date, request_date
-	yesterday = datetime.timedelta(days=14)
+	yesterday = datetime.timedelta(days=7)
 	yesterday_date = now - yesterday
 	weekday = yesterday_date.weekday()
 	if weekday == 5:
@@ -219,8 +222,9 @@ drop_unused_columns()
 #print stock_basic_info
 get_all_a_stocks()
 basic_filters()
-filter_by_avg_price_volume()
-filter_by_slope()
+#filter_by_avg_price_volume()
+
+#filter_by_slope()
 print_details()
 
 

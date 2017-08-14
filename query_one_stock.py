@@ -6,7 +6,7 @@ import tushare as ts
 #reload(sys)
 
 #sys.setdefaultencoding('utf-8')
-stock_code = "000413"
+stock_code = "600230"
 
 stocks = ts.get_stock_basics()
 hist = ts.get_hist_data(stock_code,start="2017-08-02")
