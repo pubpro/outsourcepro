@@ -1,4 +1,4 @@
-# outsourcepro
+# 每只股票
 --代码
 --行业
 --市盈率 = 当前股价 / 每股收益  --越小越好
@@ -25,8 +25,8 @@
 --资产的经营现金流量回报率 = 经营活动现金净流量 / 总资产 * 100%  --越大越好
 --经营现金净流量对负债比率 = 经营活动现金净流量 / 总负债 * 100%  --越大越好
 --现金流量比率 = 企业经营活动所产生的现金流量可以抵偿流动负债的程度 = 经营活动现金净流量 / 流动负债 * 100%  --越大越好
---每股收益 = 净利润 / 总股本
---净资产收益率 = 权益报酬率 = 净利润 / 所有者权益
+--每股收益 = 净利润 / 总股本  --越大越好
+--净资产收益率 = 权益报酬率 = 净利润 / 所有者权益  --越大越好
 
 
 
@@ -39,4 +39,29 @@
 --速动资产 = 货币资金 + 短期投资 + 应收票据 + 应收账款 + 及其他应收款
 --货币资金 = 库存现金 + 银行存款 + 其他货币资金
 --交易性金融资产 = 债券投资 + 股票投资 + 基金投资
+
+
+
+
+任务：
+db_sync.py (missing price data)
+
+
+getbasicavg.sql
+*getstockpriceavg.sql (use ts.get_today_all())
+getreportavg.sql
+getprofitavg.sql
+getoperationavg.sql
+getgrowthavg.sql
+getdebtpayavg.sql
+getcashflowavg.sql
+
+*getallindexavg.sql
+*getallstockindex.sql
+
+--left tasks
+update db_sync to include price data
+create procedure to calculate average price of each industry
+update getallindexavg
+update getallstockindex
 
