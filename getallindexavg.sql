@@ -1,0 +1,84 @@
+
+DROP PROCEDURE GetAllIndexAvg;
+
+
+--行业
+--市盈率
+--市净率
+--每股净资产
+--净利率
+--毛利率
+--每股主营业务收入
+--应收帐款周转率
+--存货周转率
+--流动资产周转率
+--主营业务收入增长率
+--净利润增长率
+--净资产增长率
+--总资产增长率
+--每股收益增长率
+--股东权益增长率
+--流动比率
+--速动比率
+--现金比率
+--利息支付倍数
+--股东权益比率
+--经营现金净流量对销售收入比率
+--资产的经营现金流量回报率
+--经营现金净流量对负债比率
+--现金流量比率
+--每股收益
+--净资产收益率
+
+
+DELIMITER //
+CREATE PROCEDURE GetAllIndexAvg()
+BEGIN
+DROP TABLE IF EXISTS RESULT_ALLINDEX_AVG;
+CREATE TABLE RESULT_ALLINDEX_AVG AS
+SELECT T1.INDUSTRY, 
+T1.PE, 
+T1.PB, 
+T1.BVPS,
+T2.NPR, 
+T2.GPR, 
+T2.BIPS, 
+T3.ARTURNOVER, 
+T3.INVENTORY_TURNOVER, 
+T3.CURRENTASSET_TURNOVER, 
+T4.MBRG, 
+T4.NPRG, 
+T4.NAV, 
+T4.TARG, 
+T4.EPSG, 
+T4.SEG, 
+T5.CURRENTRATIO, 
+T5.QUICKRATIO, 
+T5.CASHRATIO, 
+T5.ICRATIO, 
+T5.SHEQRATIO, 
+T6.cf_sales, 
+T6.rateofreturn, 
+T6.cf_liabilities, 
+T6.cashflowratio,
+T7.eps,
+T7.roe
+ FROM RESULT_BASIC_AVG AS T1
+INNER JOIN RESULT_PROFIT_AVG AS T2
+ON T1.INDUSTRY = T2.INDUSTRY
+INNER JOIN RESULT_OPERATION_AVG AS T3
+ON T1.INDUSTRY = T3.INDUSTRY
+INNER JOIN RESULT_GROWTH_AVG AS T4
+ON T1.INDUSTRY = T4.INDUSTRY
+INNER JOIN RESULT_DEBTPAY_AVG AS T5
+ON T1.INDUSTRY = T5.INDUSTRY
+INNER JOIN RESULT_CASHFLOW_AVG AS T6
+ON T1.INDUSTRY = T6.INDUSTRY
+INNER JOIN RESULT_REPORT_AVG AS T7
+ON T1.INDUSTRY = T7.INDUSTRY;
+
+END;
+
+
+CALL GetAllIndexAvg();
+

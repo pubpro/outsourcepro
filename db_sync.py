@@ -5,8 +5,42 @@ import tushare as ts
 # define engine
 engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8')
 
+# =================================================industry data=================================================
+# import industry data
+#code：股票代码
+#name：股票名称
+#c_name：行业名称
+#df = ts.get_industry_classified()
+#df.to_sql('industry_data',engine, if_exists='replace')
 
+
+
+
+# =================================================company data==================================================
 # import basic data
+#code,代码
+#name,名称
+#industry,所属行业
+#area,地区
+#pe,市盈率
+#outstanding,流通股本(亿)
+#totals,总股本(亿)
+#totalAssets,总资产(万)
+#liquidAssets,流动资产
+#fixedAssets,固定资产
+#reserved,公积金
+#reservedPerShare,每股公积金
+#esp,每股收益
+#bvps,每股净资
+#pb,市净率
+#timeToMarket,上市日期
+#undp,未分利润
+#perundp, 每股未分配
+#rev,收入同比(%)
+#profit,利润同比(%)
+#gpr,毛利率(%)
+#npr,净利润率(%)
+#holders,股东人数
 df = ts.get_stock_basics()
 df.to_sql('basic_info',engine, if_exists='replace')
 
@@ -22,13 +56,11 @@ df.to_sql('basic_info',engine, if_exists='replace')
 #profits_yoy,净利润同比(%)
 #distrib,分配方案
 #report_date,发布日期
-df = ts.get_report_data(2016,3)
-df.to_sql('report_data',engine, if_exists='replace')
-df = ts.get_report_data(2016,4)
-df.to_sql('report_data',engine, if_exists='append')
 df = ts.get_report_data(2017,1)
-df.to_sql('report_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('report_data',engine, if_exists='replace')
 df = ts.get_report_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('report_data',engine, if_exists='append')
 
 # import profit data
@@ -41,14 +73,13 @@ df.to_sql('report_data',engine, if_exists='append')
 #esp,每股收益
 #business_income,营业收入(百万元)
 #bips,每股主营业务收入(元)
-df = ts.get_profit_data(2016,3)
-df.to_sql('profit_data',engine, if_exists='replace')
-df = ts.get_profit_data(2016,4)
-df.to_sql('profit_data',engine, if_exists='append')
 df = ts.get_profit_data(2017,1)
-df.to_sql('profit_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('profit_data',engine, if_exists='replace')
 df = ts.get_profit_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('profit_data',engine, if_exists='append')
+
 
 
 
@@ -61,13 +92,11 @@ df.to_sql('profit_data',engine, if_exists='append')
 #inventory_days,存货周转天数(天)
 #currentasset_turnover,流动资产周转率(次)
 #currentasset_days,流动资产周转天数(天)
-df = ts.get_operation_data(2016,3)
-df.to_sql('operation_data',engine, if_exists='replace')
-df = ts.get_operation_data(2016,4)
-df.to_sql('operation_data',engine, if_exists='append')
 df = ts.get_operation_data(2017,1)
-df.to_sql('operation_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('operation_data',engine, if_exists='replace')
 df = ts.get_operation_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('operation_data',engine, if_exists='append')
 
 
@@ -81,13 +110,11 @@ df.to_sql('operation_data',engine, if_exists='append')
 #targ,总资产增长率
 #epsg,每股收益增长率
 #seg,股东权益增长率
-df = ts.get_growth_data(2016,3)
-df.to_sql('growth_data',engine, if_exists='replace')
-df = ts.get_growth_data(2016,4)
-df.to_sql('growth_data',engine, if_exists='append')
 df = ts.get_growth_data(2017,1)
-df.to_sql('growth_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('growth_data',engine, if_exists='replace')
 df = ts.get_growth_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('growth_data',engine, if_exists='append')
 
 
@@ -101,13 +128,11 @@ df.to_sql('growth_data',engine, if_exists='append')
 #icratio,利息支付倍数
 #sheqratio,股东权益比率
 #adratio,股东权益增长率
-df = ts.get_debtpaying_data(2016,3)
-df.to_sql('debtpay_data',engine, if_exists='replace')
-df = ts.get_debtpaying_data(2016,4)
-df.to_sql('debtpay_data',engine, if_exists='append')
 df = ts.get_debtpaying_data(2017,1)
-df.to_sql('debtpay_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('debtpay_data',engine, if_exists='replace')
 df = ts.get_debtpaying_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('debtpay_data',engine, if_exists='append')
 
 
@@ -120,13 +145,11 @@ df.to_sql('debtpay_data',engine, if_exists='append')
 #cf_nm,经营现金净流量与净利润的比率
 #cf_liabilities,经营现金净流量对负债比率
 #cashflowratio,现金流量比率
-df = ts.get_cashflow_data(2016,3)
-df.to_sql('cashflow_data',engine, if_exists='replace')
-df = ts.get_cashflow_data(2016,4)
-df.to_sql('cashflow_data',engine, if_exists='append')
 df = ts.get_cashflow_data(2017,1)
-df.to_sql('cashflow_data',engine, if_exists='append')
+df = df.assign(quater=20171)
+df.to_sql('cashflow_data',engine, if_exists='replace')
 df = ts.get_cashflow_data(2017,2)
+df = df.assign(quater=20172)
 df.to_sql('cashflow_data',engine, if_exists='append')
 
 
