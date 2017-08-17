@@ -44,17 +44,48 @@
 
 
 程序运行次序：
-db_sync.py
+db_sync.py  --python db_sync.py
+
+getbasicavg.sql  --CALL GetBasicAvg();
+getreportavg.sql  --CALL GetReportAvg();
+getprofitavg.sql  --CALL GetProfitAvg();
+getoperationavg.sql  --CALL GetOperationAvg();
+getgrowthavg.sql  --CALL GetGrowthAvg();
+getdebtpayavg.sql --CALL GetDebtpayAvg();
+getcashflowavg.sql  --CALL GetCashflowAvg();
+getallindexavg.sql  --CALL GetAllIndexAvg();
+getallstockindex.sql  --CALL GetAllStockIndex();
 
 
-getbasicavg.sql
-getreportavg.sql
-getprofitavg.sql
-getoperationavg.sql
-getgrowthavg.sql
-getdebtpayavg.sql
-getcashflowavg.sql
-getallindexavg.sql
-getallstockindex.sql
-
-
+execute below SQL to get final purchase list:
+SELECT T1.*,T2.PRICE AS AVG_PRICE FROM RESULT_ALLSTOCKINDEX AS T1
+INNER JOIN RESULT_ALLINDEX_AVG AS T2
+ON T1.INDUSTRY = T2.INDUSTRY
+WHERE 1 = 1
+#AND T1.PE <= T2.PE
+#AND T1.PB <= T2.PB
+#AND T1.BVPS >= T2.BVPS
+AND T1.NPR >= T2.NPR
+#AND T1.GPR >= T2.GPR
+AND T1.BIPS >= T2.BIPS
+AND T1.ARTURNOVER >= T2.ARTURNOVER
+#AND T1.INVENTORY_TURNOVER >= T2.INVENTORY_TURNOVER
+#AND T1.CURRENTASSET_TURNOVER >= T2.CURRENTASSET_TURNOVER
+#AND T1.MBRG >= T2.MBRG
+AND T1.NPRG >= T2.NPRG
+#AND T1.NAV >= T2.NAV
+#AND T1.TARG >= T2.TARG
+#AND T1.EPSG >= T2.EPSG
+AND T1.SEG >= T2.SEG
+AND T1.CURRENTRATIO >= T2.CURRENTRATIO
+AND T1.QUICKRATIO >= T2.QUICKRATIO
+AND T1.CASHRATIO >= T2.CASHRATIO
+#AND T1.ICRATIO >= T2.ICRATIO
+AND T1.SHEQRATIO >= T2.SHEQRATIO
+#AND T1.CF_SALES >= T2.CF_SALES
+#AND T1.RATEOFRETURN >= T2.RATEOFRETURN
+AND T1.CF_LIABILITIES >= T2.CF_LIABILITIES
+AND T1.CASHFLOWRATIO >= T2.CASHFLOWRATIO
+AND T1.EPS >= T2.EPS
+AND T1.ROE >= T2.ROE
+AND T1.PRICE <= T2.PRICE
