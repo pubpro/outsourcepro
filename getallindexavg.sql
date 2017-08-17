@@ -29,6 +29,7 @@ DROP PROCEDURE GetAllIndexAvg;
 --现金流量比率
 --每股收益
 --净资产收益率
+--平均股价
 
 
 DELIMITER //
@@ -62,7 +63,8 @@ T6.rateofreturn,
 T6.cf_liabilities, 
 T6.cashflowratio,
 T7.eps,
-T7.roe
+T7.roe,
+T1.PE * T7.eps as price
  FROM RESULT_BASIC_AVG AS T1
 INNER JOIN RESULT_PROFIT_AVG AS T2
 ON T1.INDUSTRY = T2.INDUSTRY

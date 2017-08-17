@@ -43,25 +43,18 @@
 
 
 
-任务：
-db_sync.py (missing price data)
+程序运行次序：
+db_sync.py
 
 
 getbasicavg.sql
-*getstockpriceavg.sql (use ts.get_today_all())
 getreportavg.sql
 getprofitavg.sql
 getoperationavg.sql
 getgrowthavg.sql
 getdebtpayavg.sql
 getcashflowavg.sql
+getallindexavg.sql
+getallstockindex.sql
 
-*getallindexavg.sql
-*getallstockindex.sql
-
---left tasks
-update db_sync to include price data
-create procedure to calculate average price of each industry
-update getallindexavg
-update getallstockindex
 

@@ -8,7 +8,7 @@ CREATE TABLE RESULT_DEBTPAY_AVG AS
 select a.industry, avg(b.currentratio) as currentratio,avg(b.quickratio) as quickratio,avg(b.cashratio) as cashratio,avg(b.icratio) as icratio,
 avg(b.sheqratio) as sheqratio from basic_info as a
 inner join (
-select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data 
+select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data 
 	where quater = 20172 
 	and currentratio is not null
 	and quickratio is not null
@@ -16,8 +16,8 @@ select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_dat
 	and icratio is not null
 	and sheqratio is not null
 UNION ALL 
-select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data 
-	where code not in (select code from debtpay_data where quater = 20172)
+select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data 
+	where code not in (select distinct code from debtpay_data where quater = 20172)
 	and currentratio is not null
 	and quickratio is not null
 	and cashratio is not null

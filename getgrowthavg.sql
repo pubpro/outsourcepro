@@ -8,7 +8,7 @@ CREATE TABLE RESULT_GROWTH_AVG AS
 select a.industry, avg(b.mbrg) as mbrg,avg(b.nprg) as nprg,avg(b.nav) as nav,avg(b.targ) as targ,avg(b.epsg) as epsg,avg(b.seg) as seg
 from basic_info as a
 inner join (
-select code,mbrg,nprg,nav,targ,epsg,seg from growth_data 
+select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data 
 	where quater = 20172 
 	and mbrg is not null
 	and nprg is not null
@@ -17,8 +17,8 @@ select code,mbrg,nprg,nav,targ,epsg,seg from growth_data
 	and epsg is not null
 	and seg is not null
 UNION ALL 
-select code,mbrg,nprg,nav,targ,epsg,seg from growth_data 
-	where code not in (select code from growth_data where quater = 20172)
+select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data 
+	where code not in (select distinct code from growth_data where quater = 20172)
 	and mbrg is not null
 	and nprg is not null
 	and nav is not null

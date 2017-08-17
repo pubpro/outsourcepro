@@ -29,6 +29,7 @@ DROP PROCEDURE GetAllStockIndex;
 --现金流量比率
 --每股收益
 --净资产收益率
+--当前股价
 
 
 
@@ -61,18 +62,21 @@ T5.SHEQRATIO,
 T6.cf_sales, 
 T6.rateofreturn, 
 T6.cf_liabilities, 
-T6.cashflowratio
+T6.cashflowratio,
+T7.eps,
+T7.roe,
+T1.PE * T7.eps as price
  FROM basic_info AS T1
 INNER JOIN 
 (
-select code,net_profit_ratio,gross_profit_rate,bips from profit_data
+select distinct code,net_profit_ratio,gross_profit_rate,bips from profit_data
         where quater = 20172
         and net_profit_ratio is not null
         and gross_profit_rate is not null
         and bips is not null
 UNION ALL
-select code,net_profit_ratio,gross_profit_rate,bips from profit_data
-        where code not in (select code from profit_data where quater = 20172)
+select distinct code,net_profit_ratio,gross_profit_rate,bips from profit_data
+        where code not in (select distinct code from profit_data where quater = 20172)
         and net_profit_ratio is not null
         and gross_profit_rate is not null
         and bips is not null
@@ -80,14 +84,14 @@ select code,net_profit_ratio,gross_profit_rate,bips from profit_data
 ON T1.CODE = T2.CODE
 INNER JOIN 
 (
-select code,arturnover,inventory_turnover,currentasset_turnover from operation_data
+select distinct code,arturnover,inventory_turnover,currentasset_turnover from operation_data
         where quater = 20172
         and arturnover is not null
         and inventory_turnover is not null
         and currentasset_turnover is not null
 UNION ALL
-select code,arturnover,inventory_turnover,currentasset_turnover from operation_data
-        where code not in (select code from operation_data where quater = 20172)
+select distinct code,arturnover,inventory_turnover,currentasset_turnover from operation_data
+        where code not in (select distinct code from operation_data where quater = 20172)
         and arturnover is not null
         and inventory_turnover is not null
         and currentasset_turnover is not null
@@ -95,7 +99,7 @@ select code,arturnover,inventory_turnover,currentasset_turnover from operation_d
 ON T1.CODE = T3.CODE
 INNER JOIN 
 (
-select code,mbrg,nprg,nav,targ,epsg,seg from growth_data
+select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data
         where quater = 20172
         and mbrg is not null
         and nprg is not null
@@ -104,8 +108,8 @@ select code,mbrg,nprg,nav,targ,epsg,seg from growth_data
         and epsg is not null
         and seg is not null
 UNION ALL
-select code,mbrg,nprg,nav,targ,epsg,seg from growth_data
-        where code not in (select code from growth_data where quater = 20172)
+select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data
+        where code not in (select distinct code from growth_data where quater = 20172)
         and mbrg is not null
         and nprg is not null
         and nav is not null
@@ -116,7 +120,7 @@ select code,mbrg,nprg,nav,targ,epsg,seg from growth_data
 ON T1.CODE = T4.CODE
 INNER JOIN 
 (
-select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
+select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
         where quater = 20172
         and currentratio is not null
         and quickratio is not null
@@ -124,8 +128,8 @@ select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_dat
         and icratio is not null
         and sheqratio is not null
 UNION ALL
-select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
-        where code not in (select code from debtpay_data where quater = 20172)
+select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
+        where code not in (select distinct code from debtpay_data where quater = 20172)
         and currentratio is not null
         and quickratio is not null
         and cashratio is not null
@@ -135,15 +139,15 @@ select code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_dat
 ON T1.CODE = T5.CODE
 INNER JOIN 
 (
-select code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
+select distinct code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
         where quater = 20172
         and cf_sales is not null
         and rateofreturn is not null
         and cf_liabilities is not null
         and cashflowratio is not null
 UNION ALL
-select code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
-        where code not in (select code from cashflow_data where quater = 20172)
+select distinct code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
+        where code not in (select distinct code from cashflow_data where quater = 20172)
         and cf_sales is not null
         and rateofreturn is not null
         and cf_liabilities is not null
@@ -152,13 +156,13 @@ select code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_dat
 ON T1.CODE = T6.CODE
 INNER JOIN 
 (
-select code,eps,roe from report_data
+select distinct code,eps * 2 as eps,roe from report_data
         where quater = 20172
         and eps is not null
         and roe is not null
 UNION ALL
-select code,eps,roe from report_data
-        where code not in (select code from report_data where quater = 20172)
+select distinct code,eps * 4 as eps,roe from report_data
+        where code not in (select distinct code from report_data where quater = 20172)
         and eps is not null
         and roe is not null
 ) AS T7
