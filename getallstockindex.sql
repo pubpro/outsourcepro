@@ -34,7 +34,7 @@ DROP PROCEDURE GetAllStockIndex;
 
 
 DELIMITER //
-CREATE PROCEDURE GetAllStockIndex()
+CREATE PROCEDURE GetAllStockIndex(IN currentQuater INT)
 BEGIN
 DROP TABLE IF EXISTS RESULT_ALLSTOCKINDEX;
 CREATE TABLE RESULT_ALLSTOCKINDEX AS
@@ -70,13 +70,13 @@ T1.PE * T7.eps as price
 INNER JOIN 
 (
 select distinct code,net_profit_ratio,gross_profit_rate,bips from profit_data
-        where quater = 20172
+        where quater = currentQuater
         and net_profit_ratio is not null
         and gross_profit_rate is not null
         and bips is not null
 UNION ALL
 select distinct code,net_profit_ratio,gross_profit_rate,bips from profit_data
-        where code not in (select distinct code from profit_data where quater = 20172)
+        where code not in (select distinct code from profit_data where quater = currentQuater)
         and net_profit_ratio is not null
         and gross_profit_rate is not null
         and bips is not null
@@ -85,13 +85,13 @@ ON T1.CODE = T2.CODE
 INNER JOIN 
 (
 select distinct code,arturnover,inventory_turnover,currentasset_turnover from operation_data
-        where quater = 20172
+        where quater = currentQuater
         and arturnover is not null
         and inventory_turnover is not null
         and currentasset_turnover is not null
 UNION ALL
 select distinct code,arturnover,inventory_turnover,currentasset_turnover from operation_data
-        where code not in (select distinct code from operation_data where quater = 20172)
+        where code not in (select distinct code from operation_data where quater = currentQuater)
         and arturnover is not null
         and inventory_turnover is not null
         and currentasset_turnover is not null
@@ -100,7 +100,7 @@ ON T1.CODE = T3.CODE
 INNER JOIN 
 (
 select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data
-        where quater = 20172
+        where quater = currentQuater
         and mbrg is not null
         and nprg is not null
         and nav is not null
@@ -109,7 +109,7 @@ select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data
         and seg is not null
 UNION ALL
 select distinct code,mbrg,nprg,nav,targ,epsg,seg from growth_data
-        where code not in (select distinct code from growth_data where quater = 20172)
+        where code not in (select distinct code from growth_data where quater = currentQuater)
         and mbrg is not null
         and nprg is not null
         and nav is not null
@@ -121,7 +121,7 @@ ON T1.CODE = T4.CODE
 INNER JOIN 
 (
 select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
-        where quater = 20172
+        where quater = currentQuater
         and currentratio is not null
         and quickratio is not null
         and cashratio is not null
@@ -129,7 +129,7 @@ select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from de
         and sheqratio is not null
 UNION ALL
 select distinct code,currentratio,quickratio,cashratio,icratio,sheqratio from debtpay_data
-        where code not in (select distinct code from debtpay_data where quater = 20172)
+        where code not in (select distinct code from debtpay_data where quater = currentQuater)
         and currentratio is not null
         and quickratio is not null
         and cashratio is not null
@@ -140,14 +140,14 @@ ON T1.CODE = T5.CODE
 INNER JOIN 
 (
 select distinct code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
-        where quater = 20172
+        where quater = currentQuater
         and cf_sales is not null
         and rateofreturn is not null
         and cf_liabilities is not null
         and cashflowratio is not null
 UNION ALL
 select distinct code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cashflow_data
-        where code not in (select distinct code from cashflow_data where quater = 20172)
+        where code not in (select distinct code from cashflow_data where quater = currentQuater)
         and cf_sales is not null
         and rateofreturn is not null
         and cf_liabilities is not null
@@ -157,12 +157,12 @@ ON T1.CODE = T6.CODE
 INNER JOIN 
 (
 select distinct code,eps * 2 as eps,roe from report_data
-        where quater = 20172
+        where quater = currentQuater
         and eps is not null
         and roe is not null
 UNION ALL
 select distinct code,eps * 4 as eps,roe from report_data
-        where code not in (select distinct code from report_data where quater = 20172)
+        where code not in (select distinct code from report_data where quater = currentQuater)
         and eps is not null
         and roe is not null
 ) AS T7

@@ -44,9 +44,11 @@
 
 
 程序运行次序：
+# change year, season, quater value and then run
 db_sync.py  --python db_sync.py
 
-call GetFinalResult(); --this procedure invoke below procedures in order
+# replace 20172 with current season
+call GetFinalResult(20172); --this procedure invoke below procedures in order
 
 getbasicavg.sql  --CALL GetBasicAvg();
 getreportavg.sql  --CALL GetReportAvg();
@@ -88,4 +90,6 @@ AND T1.SHEQRATIO >= T2.SHEQRATIO
 #AND T1.CASHFLOWRATIO >= T2.CASHFLOWRATIO
 AND T1.EPS >= T2.EPS
 #AND T1.ROE >= T2.ROE
-AND T1.PRICE <= (T2.PRICE / 2)
+AND T1.PRICE <= (T2.PRICE / 1.5)
+AND T1.PRICE < 50
+AND (T1.CODE LIKE '0%' OR T1.CODE LIKE '6%')

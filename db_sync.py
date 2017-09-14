@@ -2,6 +2,15 @@
 from sqlalchemy import create_engine
 import tushare as ts
 
+
+lastYear = 2017
+lastSeason = 1
+quater=lastQuater = 20171
+currentYear = 2017
+currentSeason = 2
+quater=currentQuater = 20172
+
+
 # define engine
 engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8')
 
@@ -56,11 +65,11 @@ df.to_sql('basic_info',engine, if_exists='replace')
 #profits_yoy,净利润同比(%)
 #distrib,分配方案
 #report_date,发布日期
-df = ts.get_report_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_report_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('report_data',engine, if_exists='replace')
-df = ts.get_report_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_report_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('report_data',engine, if_exists='append')
 
 # import profit data
@@ -73,11 +82,11 @@ df.to_sql('report_data',engine, if_exists='append')
 #esp,每股收益
 #business_income,营业收入(百万元)
 #bips,每股主营业务收入(元)
-df = ts.get_profit_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_profit_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('profit_data',engine, if_exists='replace')
-df = ts.get_profit_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_profit_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('profit_data',engine, if_exists='append')
 
 
@@ -92,11 +101,11 @@ df.to_sql('profit_data',engine, if_exists='append')
 #inventory_days,存货周转天数(天)
 #currentasset_turnover,流动资产周转率(次)
 #currentasset_days,流动资产周转天数(天)
-df = ts.get_operation_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_operation_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('operation_data',engine, if_exists='replace')
-df = ts.get_operation_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_operation_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('operation_data',engine, if_exists='append')
 
 
@@ -110,11 +119,11 @@ df.to_sql('operation_data',engine, if_exists='append')
 #targ,总资产增长率
 #epsg,每股收益增长率
 #seg,股东权益增长率
-df = ts.get_growth_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_growth_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('growth_data',engine, if_exists='replace')
-df = ts.get_growth_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_growth_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('growth_data',engine, if_exists='append')
 
 
@@ -128,11 +137,11 @@ df.to_sql('growth_data',engine, if_exists='append')
 #icratio,利息支付倍数
 #sheqratio,股东权益比率
 #adratio,股东权益增长率
-df = ts.get_debtpaying_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_debtpaying_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('debtpay_data',engine, if_exists='replace')
-df = ts.get_debtpaying_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_debtpaying_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('debtpay_data',engine, if_exists='append')
 
 
@@ -145,11 +154,11 @@ df.to_sql('debtpay_data',engine, if_exists='append')
 #cf_nm,经营现金净流量与净利润的比率
 #cf_liabilities,经营现金净流量对负债比率
 #cashflowratio,现金流量比率
-df = ts.get_cashflow_data(2017,1)
-df = df.assign(quater=20171)
+df = ts.get_cashflow_data(lastYear,lastSeason)
+df = df.assign(quater=lastQuater)
 df.to_sql('cashflow_data',engine, if_exists='replace')
-df = ts.get_cashflow_data(2017,2)
-df = df.assign(quater=20172)
+df = ts.get_cashflow_data(currentYear,currentSeason)
+df = df.assign(quater=currentQuater)
 df.to_sql('cashflow_data',engine, if_exists='append')
 
 
