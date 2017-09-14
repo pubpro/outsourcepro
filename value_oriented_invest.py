@@ -228,8 +228,3 @@ basic_filters()
 #filter_by_slope()
 print_details()
 
-
-
-
-
-
