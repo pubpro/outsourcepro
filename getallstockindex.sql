@@ -33,9 +33,16 @@ DROP PROCEDURE GetAllStockIndex;
 
 
 
-DELIMITER //
 CREATE PROCEDURE GetAllStockIndex(IN currentQuater INT)
 BEGIN
+DECLARE lastEPSTimes FLOAT;
+DECLARE currentEPSTimes FLOAT;
+IF currentQuater = 1 THEN SET currentEPSTimes = 4; SET lastEPSTimes = 1;
+ELSEIF currentQuater = 2 THEN SET currentEPSTimes = 2; SET lastEPSTimes = 4;
+ELSEIF currentQuater = 3 THEN SET currentEPSTimes = 1.333334; SET lastEPSTimes = 2;
+ELSEIF currentQuater = 4  THEN SET currentEPSTimes = 1; SET lastEPSTimes = 1.333334;
+END IF;
+
 DROP TABLE IF EXISTS RESULT_ALLSTOCKINDEX;
 CREATE TABLE RESULT_ALLSTOCKINDEX AS
 SELECT T1.CODE, T1.INDUSTRY,
@@ -156,12 +163,12 @@ select distinct code,cf_sales,rateofreturn,cf_liabilities,cashflowratio from cas
 ON T1.CODE = T6.CODE
 INNER JOIN 
 (
-select distinct code,eps * 2 as eps,roe from report_data
+select distinct code,eps * currentEPSTimes as eps,roe from report_data
         where quater = currentQuater
         and eps is not null
         and roe is not null
 UNION ALL
-select distinct code,eps * 4 as eps,roe from report_data
+select distinct code,eps * lastEPSTimes as eps,roe from report_data
         where code not in (select distinct code from report_data where quater = currentQuater)
         and eps is not null
         and roe is not null
@@ -171,5 +178,5 @@ ON T1.CODE = T7.CODE;
 END;
 
 
-CALL GetAllStockIndex();
+
 

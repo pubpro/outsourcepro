@@ -4,11 +4,11 @@ import tushare as ts
 
 
 lastYear = 2017
-lastSeason = 1
-quater=lastQuater = 20171
+lastSeason = 2
+quater=lastQuater = 20172
 currentYear = 2017
-currentSeason = 2
-quater=currentQuater = 20172
+currentSeason = 3
+quater=currentQuater = 20173
 
 
 # define engine
@@ -23,6 +23,16 @@ engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8'
 #df.to_sql('industry_data',engine, if_exists='replace')
 
 
+# =================================================bonus data=================================================
+# import bonus data
+#code:股票代码
+#name:股票名称
+#year:分配年份
+#report_date:公布日期
+#divi:分红金额（每10股）
+#shares:转增和送股数（每10股）
+df = ts.profit_data(year=lastYear,top=1000)
+df.to_sql('bonus_data',engine, if_exists='replace')
 
 
 # =================================================company data==================================================
