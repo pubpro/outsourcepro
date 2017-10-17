@@ -37,10 +37,13 @@ CREATE PROCEDURE GetAllStockIndex(IN currentQuater INT)
 BEGIN
 DECLARE lastEPSTimes FLOAT;
 DECLARE currentEPSTimes FLOAT;
-IF currentQuater = 1 THEN SET currentEPSTimes = 4; SET lastEPSTimes = 1;
-ELSEIF currentQuater = 2 THEN SET currentEPSTimes = 2; SET lastEPSTimes = 4;
-ELSEIF currentQuater = 3 THEN SET currentEPSTimes = 1.333334; SET lastEPSTimes = 2;
-ELSEIF currentQuater = 4  THEN SET currentEPSTimes = 1; SET lastEPSTimes = 1.333334;
+DECLARE season INT;
+
+select mod(currentQuater,10) into season;
+IF season = 1 THEN SET currentEPSTimes = 4; SET lastEPSTimes = 1;
+ELSEIF season = 2 THEN SET currentEPSTimes = 2; SET lastEPSTimes = 4;
+ELSEIF season = 3 THEN SET currentEPSTimes = 1.333334; SET lastEPSTimes = 2;
+ELSEIF season = 4  THEN SET currentEPSTimes = 1; SET lastEPSTimes = 1.333334;
 END IF;
 
 DROP TABLE IF EXISTS RESULT_ALLSTOCKINDEX;

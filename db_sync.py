@@ -19,8 +19,8 @@ engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8'
 #code：股票代码
 #name：股票名称
 #c_name：行业名称
-#df = ts.get_industry_classified()
-#df.to_sql('industry_data',engine, if_exists='replace')
+df = ts.get_industry_classified()
+df.to_sql('industry_data',engine, if_exists='replace')
 
 
 # =================================================bonus data=================================================
