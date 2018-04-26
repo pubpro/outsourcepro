@@ -4,11 +4,11 @@ import tushare as ts
 
 
 lastYear = 2017
-lastSeason = 3
-quater=lastQuater = 20173
-currentYear = 2017
-currentSeason = 4
-quater=currentQuater = 20174
+lastSeason = 4
+quater=lastQuater = 20174
+currentYear = 2018
+currentSeason = 1
+quater=currentQuater = 20181
 
 
 # define engine

@@ -48,7 +48,7 @@
 db_sync.py  --python db_sync.py
 
 # replace 20172 with current season
-call GetFinalResult(20173); --this procedure invoke below procedures in order
+call GetFinalResult(20181); --this procedure invoke below procedures in order
 
 getbasicavg.sql  --CALL GetBasicAvg();
 getreportavg.sql  --CALL GetReportAvg();
