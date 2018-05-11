@@ -12,7 +12,7 @@ class TargetPrice(Base):
 	__tablename__ = 'TARGET_PRICE';
 	code = Column(String(6),primary_key=True);
 	name = Column(String(24));
-	target_price = Column(Float);
+	purchase_price = Column(Float);
 
 # define engine
 engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8');
@@ -24,7 +24,15 @@ targets = session.query(TargetPrice).all();
 for target in targets:
 	df = ts.get_realtime_quotes(target.code);
 	currentPrice = float(df.ix[0,['price']].tolist()[0]);
-	if target.target_price > currentPrice:
+	closePrice = float(df.ix[0,['pre_close']].tolist()[0]);
+	increasePercents = (closePrice - target.purchase_price) / target.purchase_price * 100;
+	if increasePercents > 20: 
+		targetPrice = closePrice - (closePrice * 8 / 100);
+	elif increasePercents > 10:
+		targetPrice = closePrice - (closePrice * 5 / 100);
+	else:
+		targetPrice = target.purchase_price - (target.purchase_price * 3 / 100);
+	if targetPrice > currentPrice:
 		print(target.code);
 		warnFlag = 1;
 
