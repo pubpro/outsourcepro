@@ -13,6 +13,7 @@ class TargetPrice(Base):
 	code = Column(String(6),primary_key=True);
 	name = Column(String(24));
 	purchase_price = Column(Float);
+	base_price = Column(Float);
 
 # define engine
 engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8');
@@ -25,11 +26,18 @@ for target in targets:
 	df = ts.get_realtime_quotes(target.code);
 	currentPrice = float(df.ix[0,['price']].tolist()[0]);
 	closePrice = float(df.ix[0,['pre_close']].tolist()[0]);
-	increasePercents = (closePrice - target.purchase_price) / target.purchase_price * 100;
+	if closePrice > target.base_price:
+		# update base price
+		basePrice = closePrice;
+		session.query(TargetPrice).filter_by(code=target.code).update({"base_price": closePrice});
+		session.commit()
+	else:
+		basePrice = target.base_price;
+	increasePercents = (basePrice - target.purchase_price) / target.purchase_price * 100;
 	if increasePercents > 20: 
-		targetPrice = closePrice - (closePrice * 8 / 100);
+		targetPrice = basePrice - (basePrice * 8 / 100);
 	elif increasePercents > 10:
-		targetPrice = closePrice - (closePrice * 5 / 100);
+		targetPrice = basePrice - (basePrice * 5 / 100);
 	else:
 		targetPrice = target.purchase_price - (target.purchase_price * 3 / 100);
 	if targetPrice > currentPrice:
