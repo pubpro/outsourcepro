@@ -35,9 +35,11 @@ for target in targets:
 		basePrice = target.base_price;
 	increasePercents = (basePrice - target.purchase_price) / target.purchase_price * 100;
 	if increasePercents > 20: 
-		targetPrice = basePrice - (basePrice * 8 / 100);
+		targetPrice = basePrice - (basePrice * 10 / 100);
 	elif increasePercents > 10:
-		targetPrice = basePrice - (basePrice * 5 / 100);
+		targetPrice = basePrice - (basePrice * 6 / 100);
+	elif increasePercents > 5:
+		targetPrice = basePrice - (basePrice * 3 / 100);
 	else:
 		targetPrice = target.purchase_price - (target.purchase_price * 3 / 100);
 	if targetPrice > currentPrice:
