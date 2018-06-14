@@ -25,4 +25,4 @@ group by a.industry;
 END;
 
 
---CALL GetProfitAvg();
+-- CALL GetProfitAvg();

@@ -27,5 +27,5 @@ group by a.industry;
 END;
 
 
---CALL GetCashflowAvg();
+-- CALL GetCashflowAvg();
 

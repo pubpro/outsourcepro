@@ -33,4 +33,4 @@ group by a.industry;
 END;
 
 
---CALL GetReportAvg();
+-- CALL GetReportAvg();

@@ -82,5 +82,5 @@ ON T1.INDUSTRY = T7.INDUSTRY;
 END;
 
 
---CALL GetAllIndexAvg();
+-- CALL GetAllIndexAvg();
 

@@ -1,4 +1,4 @@
-DROP PROCEDURE GetFinalResult;
+DROP PROCEDURE IF EXISTS GetFinalResult;
 
 DELIMITER //
 CREATE PROCEDURE GetFinalResult(IN currentQuater INT)
@@ -17,4 +17,4 @@ CALL GetAllStockIndex(currentQuater);
 END;
 
 
-CALL GetFinalResult();
+-- CALL GetFinalResult();

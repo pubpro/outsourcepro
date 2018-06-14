@@ -25,5 +25,5 @@ group by a.industry;
 END;
 
 
---CALL GetOperationAvg();
+-- CALL GetOperationAvg();
 

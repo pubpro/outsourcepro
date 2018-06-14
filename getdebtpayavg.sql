@@ -30,5 +30,5 @@ group by a.industry;
 END;
 
 
---CALL GetDebtpayAvg();
+-- CALL GetDebtpayAvg();
 

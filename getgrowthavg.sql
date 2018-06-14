@@ -32,5 +32,5 @@ group by a.industry;
 END;
 
 
---CALL GetGrowthAvg();
+-- CALL GetGrowthAvg();
 
