@@ -1,5 +1,5 @@
 
-DROP PROCEDURE GetAllIndexAvg;
+DROP PROCEDURE IF EXISTS GetAllIndexAvg;
 
 
 --行业
@@ -82,5 +82,5 @@ ON T1.INDUSTRY = T7.INDUSTRY;
 END;
 
 
-CALL GetAllIndexAvg();
+--CALL GetAllIndexAvg();
 

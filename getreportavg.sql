@@ -1,5 +1,5 @@
 # get average eps,bvps,roe,epcf
-DROP PROCEDURE GetReportAvg;
+DROP PROCEDURE IF EXISTS GetReportAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetReportAvg(IN currentQuater INT)
@@ -33,4 +33,4 @@ group by a.industry;
 END;
 
 
-CALL GetReportAvg();
+--CALL GetReportAvg();

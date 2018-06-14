@@ -1,4 +1,4 @@
-DROP PROCEDURE GetDebtpayAvg;
+DROP PROCEDURE IF EXISTS GetDebtpayAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetDebtpayAvg(IN currentQuater INT)
@@ -30,5 +30,5 @@ group by a.industry;
 END;
 
 
-CALL GetDebtpayAvg();
+--CALL GetDebtpayAvg();
 

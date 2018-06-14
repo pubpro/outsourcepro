@@ -1,4 +1,4 @@
-DROP PROCEDURE GetCashflowAvg;
+DROP PROCEDURE IF EXISTS GetCashflowAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetCashflowAvg(IN currentQuater INT)
@@ -27,5 +27,5 @@ group by a.industry;
 END;
 
 
-CALL GetCashflowAvg();
+--CALL GetCashflowAvg();
 

@@ -1,4 +1,4 @@
-DROP PROCEDURE GetBasicAvg;
+DROP PROCEDURE IF EXISTS GetBasicAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetBasicAvg()
@@ -9,7 +9,7 @@ SELECT industry, AVG(pe) as pe, AVG(pb) as pb, AVG(bvps) as bvps FROM basic_info
 END;
 
 
-CALL GetBasicAvg();
+--CALL GetBasicAvg();
 
 
 

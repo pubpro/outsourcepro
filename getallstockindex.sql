@@ -1,4 +1,4 @@
-DROP PROCEDURE GetAllStockIndex;
+DROP PROCEDURE IF EXISTS GetAllStockIndex;
 
 
 --代码

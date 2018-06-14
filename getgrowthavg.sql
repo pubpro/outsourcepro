@@ -1,4 +1,4 @@
-DROP PROCEDURE GetGrowthAvg;
+DROP PROCEDURE IF EXISTS GetGrowthAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetGrowthAvg(IN currentQuater INT)
@@ -32,5 +32,5 @@ group by a.industry;
 END;
 
 
-CALL GetGrowthAvg();
+--CALL GetGrowthAvg();
 

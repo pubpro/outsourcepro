@@ -1,4 +1,4 @@
-DROP PROCEDURE GetOperationAvg;
+DROP PROCEDURE IF EXISTS GetOperationAvg;
 
 DELIMITER //
 CREATE PROCEDURE GetOperationAvg(IN currentQuater INT)
@@ -25,5 +25,5 @@ group by a.industry;
 END;
 
 
-CALL GetOperationAvg();
+--CALL GetOperationAvg();
 
