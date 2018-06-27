@@ -56,26 +56,17 @@ getcashflowavg.sql  --CALL GetCashflowAvg();
 getallindexavg.sql  --CALL GetAllIndexAvg();
 getallstockindex.sql  --CALL GetAllStockIndex();
 
-SELECT T1.CODE, T1.INDUSTRY,T1.PRICE,T2.PRICE AS AVG_PRICE,T1.PE,T2.PE AS AVG_PE, T1.PB, T2.PB AS AVG_PB,T1.EPS, T2.EPS AS AVG_EPS FROM RESULT_ALLSTOCKINDEX AS T1
-INNER JOIN RESULT_ALLINDEX_AVG AS T2
-ON T1.INDUSTRY = T2.INDUSTRY
-WHERE 1 = 1
-AND T1.GPR >= T2.GPR
-AND T1.BIPS >= T2.BIPS
-AND T1.ARTURNOVER >= T2.ARTURNOVER / 2
-AND T1.MBRG >= T2.MBRG / 2
-AND T1.EPSG >= T2.EPSG / 2
-AND T1.CURRENTRATIO >= T2.CURRENTRATIO / 2
-AND T1.SHEQRATIO >= T2.SHEQRATIO
-AND T1.EPS >= T2.EPS
-AND T1.PRICE <= (T2.PRICE / 1.5)
-ORDER BY T1.INDUSTRY
 
 
 
+# create table to hold your stocks
+create table TARGET_PRICE (CODE VARCHAR(6) PRIMARY KEY, NAME VARCHAR(24),PURCHASE_PRICE DOUBLE, BASE_PRICE DOUBLE);
+insert into TARGET_PRICE values ('000637','茂化实华',4.97,5.08);
 
 # 部署一下作业自动发送邮件
-30 22 * * * sh /root/outsourcepro/sendmail.sh
-*/1 9-12 * * 1-5 sh /root/outsourcepro/sendwarning.sh
-*/1 13-15 * * 1-5 sh /root/outsourcepro/sendwarning.sh
+0 15 * * * sh ~/project/outsourcepro/sendRecommend.sh
+0 */2 * * * sh ~/project/outsourcepro/sendNews.sh
+*/5 9-12 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
+*/5 13-15 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
+
 ```
