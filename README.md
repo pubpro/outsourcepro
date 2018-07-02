@@ -64,9 +64,11 @@ create table TARGET_PRICE (CODE VARCHAR(6) PRIMARY KEY, NAME VARCHAR(24),PURCHAS
 insert into TARGET_PRICE values ('000637','茂化实华',4.97,5.08);
 
 # 部署一下作业自动发送邮件
-0 15 * * * sh ~/project/outsourcepro/sendRecommend.sh
-0 */2 * * * sh ~/project/outsourcepro/sendNews.sh
-*/5 9-12 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
-*/5 13-15 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
+01 14 * * * sh ~/project/outsourcepro/sendRecommend.sh
+01 15 * * * sh ~/project/outsourcepro/sendRecommend.sh
+0 9-15 * * * sh ~/project/outsourcepro/sendNews.sh
+30-59/5 9-10 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
+0-30/5 11 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
+*/5 13-14 * * 1-5 sh ~/project/outsourcepro/sendAlert.sh
 
 ```
