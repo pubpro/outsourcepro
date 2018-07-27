@@ -3,12 +3,12 @@ from sqlalchemy import create_engine
 import tushare as ts
 
 
-lastYear = 2017
-lastSeason = 4
-quater=lastQuater = 20174
+lastYear = 2018
+lastSeason = 1
+lastQuater = 20181
 currentYear = 2018
-currentSeason = 1
-quater=currentQuater = 20181
+currentSeason = 2
+currentQuater = 20182
 
 
 # define engine
