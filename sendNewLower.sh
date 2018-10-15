@@ -12,4 +12,4 @@ mysql -uroot -D tushare -pAbcd1234 -e "SELECT CODE,NAME,DATE,NET,VOL, SCORE FROM
 #echo "====================短线强势票=============================">>Stock_Recommend.txt
 #mysql -uroot -D tushare -pAbcd1234 -e "SELECT CODE,NAME,DATE,NET,VOL FROM FENGTOU_RECOMMEND ORDER BY CODE, DATE" >>Stock_Recommend.txt
 
-sed 's/\t/,/g' Stock_Recommend.txt | mail -s "Stock Recommend" 519718645@qq.com
+sed 's/\t/,/g' Stock_Recommend.txt | mail -s "Stock Recommend" 915029350@qq.com 519718645@qq.com
