@@ -75,7 +75,7 @@ vim /etc/mail.rc
 set from=coolzhouguoliang@163.com
 set smtp=smtps://smtp.163.com
 set smtp-auth-user=coolzhouguoliang@163.com
-set smtp-auth-password="Zijian.Pillar"
+set smtp-auth-password="XXX"
 set smtp-auth=login
 set nss-config-dir=/etc/pki/nssdb
 set ssl-verify=ignore
