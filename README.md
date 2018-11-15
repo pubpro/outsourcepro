@@ -80,6 +80,7 @@ set smtp-auth=login
 set nss-config-dir=/etc/pki/nssdb
 set ssl-verify=ignore
 
+cd /etc/pki/nssdb
 echo -n |openssl s_client -connect smtp.163.com:465 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'>./163.crt
 certutil -A -n "GeoTrust SSL CA -G3" -t "Pu,Pu,Pu" -d ./ -i 163.crt
 
