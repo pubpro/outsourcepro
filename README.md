@@ -57,17 +57,34 @@ getallindexavg.sql  --CALL GetAllIndexAvg();
 getallstockindex.sql  --CALL GetAllStockIndex();
 
 
-# create table to hold JIATOU FENGTOU Recommend
-CREATE TABLE JIATOU_RECOMMEND AS SELECT t1.CODE,t1.NAME, t1.INDUSTRY, date_format(now(),'%y-%m-%d') as DATE, t1.SCORE,t3.net as NET,t3.net/t2.trade * 100 as VOL FROM RESULT_RECOMMEND as t1 inner join realtime_price as t2 on t1.code = t2.code inner join cap_tops as t3 on t1.code = t3.code;
+# CREATE TABLE JIATOU_RECOMMEND AS SELECT t1.CODE,t1.NAME, t1.INDUSTRY, date_format(now(),'%y-%m-%d') as DATE, t1.SCORE,t3.net as NET,t3.net/t2.trade * 100 as VOL FROM RESULT_RECOMMEND as t1 inner join realtime_price as t2 on t1.code = t2.code inner join cap_tops as t3 on t1.code = t3.code;
 
-CREATE TABLE FENGTOU_RECOMMEND AS select t1.code, t1.name, date_format(now(),'%y-%m-%d') as DATE, t2.net, t2.net/t1.trade * 100 as VOL from realtime_price as t1 inner join cap_tops as t2 on t1.code = t2.code;
+# CREATE TABLE FENGTOU_RECOMMEND AS select t1.code, t1.name, date_format(now(),'%y-%m-%d') as DATE, t2.net, t2.net/t1.trade * 100 as VOL from realtime_price as t1 inner join cap_tops as t2 on t1.code = t2.code;
 
 # create table to hold your stocks
-create table TARGET_PRICE (CODE VARCHAR(6) PRIMARY KEY, NAME VARCHAR(24),PURCHASE_PRICE DOUBLE, BASE_PRICE DOUBLE);
-insert into TARGET_PRICE values ('000637','茂化实华',4.97,5.08);
+# create table TARGET_PRICE (CODE VARCHAR(6) PRIMARY KEY, NAME VARCHAR(24),PURCHASE_PRICE DOUBLE, BASE_PRICE DOUBLE);
+# insert into TARGET_PRICE values ('000637','茂化实华',4.97,5.08);
 
 # create table to hold new low price stock
 create table new_lowprice (code text);
+
+
+# 配置邮箱
+vim /etc/mail.rc
+# append below lines
+set from=coolzhouguoliang@163.com
+set smtp=smtps://smtp.163.com
+set smtp-auth-user=coolzhouguoliang@163.com
+set smtp-auth-password="Zijian.Pillar"
+set smtp-auth=login
+set nss-config-dir=/etc/pki/nssdb
+set ssl-verify=ignore
+
+echo -n |openssl s_client -connect smtp.163.com:465 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'>./163.crt
+certutil -A -n "GeoTrust SSL CA -G3" -t "Pu,Pu,Pu" -d ./ -i 163.crt
+
+
+
 
 # 部署一下作业自动发送邮件
 01 14 * * * sh ~/project/outsourcepro/sendRecommend.sh
