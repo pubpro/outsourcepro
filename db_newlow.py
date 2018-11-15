@@ -19,7 +19,7 @@ def getHtml(url):
 def generateUpdateStatement(html):
 	soup = BeautifulSoup(html,'lxml')
 	all_td = soup.find_all('td', attrs={'class': 'tc cur'})
-	inst_stmt = "insert into new_lowprice values "
+	inst_stmt = "insert ignore into new_lowprice values "
 	for tag in all_td:
 		code = tag.contents[0].string		
 		inst_stmt = inst_stmt + "('" + code + "'),"
@@ -31,8 +31,8 @@ fihtml = getHtml("http://data.10jqka.com.cn/rank/cxd/")
 db = MySQLdb.connect("localhost", "tushare", "Abcd1234", "tushare", charset='utf8' )
 cursor = db.cursor()
 
-sql = "delete from new_lowprice"
-cursor.execute(sql)
+#sql = "delete from new_lowprice"
+#cursor.execute(sql)
 
 sql = generateUpdateStatement(fihtml)
 cursor.execute(sql)

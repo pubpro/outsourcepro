@@ -66,7 +66,7 @@ getallstockindex.sql  --CALL GetAllStockIndex();
 # insert into TARGET_PRICE values ('000637','茂化实华',4.97,5.08);
 
 # create table to hold new low price stock
-create table new_lowprice (code text);
+create table new_lowprice (code varchar(6), primary key(code))
 
 
 # 配置邮箱
