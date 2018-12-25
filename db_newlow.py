@@ -31,8 +31,8 @@ fihtml = getHtml("http://data.10jqka.com.cn/rank/cxd/")
 db = MySQLdb.connect("localhost", "tushare", "Abcd1234", "tushare", charset='utf8' )
 cursor = db.cursor()
 
-#sql = "delete from new_lowprice"
-#cursor.execute(sql)
+sql = "delete from new_lowprice"
+cursor.execute(sql)
 
 sql = generateUpdateStatement(fihtml)
 cursor.execute(sql)
