@@ -4,11 +4,11 @@ import tushare as ts
 
 
 lastYear = 2018
-lastSeason = 2
-lastQuater = 20182
+lastSeason = 3
+lastQuater = 20183
 currentYear = 2018
-currentSeason = 3
-currentQuater = 20183
+currentSeason = 4
+currentQuater = 20184
 
 
 # define engine
@@ -21,6 +21,18 @@ engine = create_engine('mysql://tushare:Abcd1234@127.0.0.1/tushare?charset=utf8'
 #c_name：行业名称
 #df = ts.get_industry_classified()
 #df.to_sql('industry_data',engine, if_exists='replace')
+
+
+
+#==================================================concept data==============================================
+# import concept data
+# code
+# name
+# c_name
+df = ts.get_concept_classified()
+df.to_sql('concept_data',engine, if_exists='replace')
+
+
 
 
 # =================================================bonus data=================================================
@@ -171,4 +183,11 @@ df = ts.get_cashflow_data(currentYear,currentSeason)
 df = df.assign(quater=currentQuater)
 df.to_sql('cashflow_data',engine, if_exists='append')
 
+
+# import concept classified
+#code
+#name
+#c_name
+df = ts.get_concept_classified()
+df.to_sql('concept_data',engine,if_exists='replace')
 
